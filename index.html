@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+        <title>No way!!!</title>
+<style>
+@keyframes placeHolderShimmer{
+    0%{
+        background-position: -468px 0
+    }
+    100%{
+        background-position: 468px 0
+    }
+}
+
+.animated-background {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+    height: 288px;
+    position: relative;
+}
+.background-masker {
+    background: #fff;
+    position: absolute;
+}
+.editor-placeholder {
+    max-width: 572px;
+    min-height: 200px;
+    padding: 40px;
+    margin-top: 40px;
+}
+
+/* Every thing below this is just positioning */
+
+.background-masker.header-top,
+.background-masker.subheader-bottom {
+    top: 0;
+    left: 120px;
+    right: 0;
+    height: 120px;
+}
+
+.background-masker.subheader-left,
+.background-masker.subheader-right {
+    top: 30px;
+    left: 40px;
+    height: 8px;
+    width: 10px;
+}
+
+.background-masker.header-bottom {
+    top: 120px;
+    height: 30px;
+    left: 0;
+    right: 0;
+}
+
+.background-masker.subheader-left,
+.background-masker.subheader-right {
+    top: 44px;
+    height: 6px;
+}
+
+
+.background-masker.header-right,
+.background-masker.subheader-right {
+    width: auto;
+    left: 300px;
+    right: 0;
+}
+
+.background-masker.subheader-right {
+    left: 230px;
+}
+
+.background-masker.subheader-bottom {
+    top: 50px;
+    height: 10px;
+}
+
+.background-masker.content-top,
+.background-masker.content-second-line,
+.background-masker.content-third-line,
+.background-masker.content-quart-line,
+.background-masker.content-fifth-line,
+.background-masker.content-second-end,
+.background-masker.content-third-end,
+.background-masker.content-first-end,
+.background-masker.content-quart-end {
+    top: 189px;
+    left: 0;
+    right: 0;
+    height: 6px;
+}
+
+.background-masker.content-top {
+    height:20px;
+}
+
+.background-masker.content-first-end,
+.background-masker.content-second-end,
+.background-masker.content-third-end,
+.background-masker.content-quart-end {
+    width: auto;
+    left: 380px;
+    right: 0;
+    top: 209px;
+    height: 12px;
+}
+
+.background-masker.content-second-line  {
+    top: 221px;
+}
+
+.background-masker.content-second-end {
+    left: 420px;
+    top: 226px;
+}
+
+.background-masker.content-third-line {
+    top: 238px;
+}
+
+.background-masker.content-third-end {
+    left: 300px;
+    top: 259px;
+}
+.background-masker.content-quart-line {
+    top: 255px;
+}
+
+.background-masker.content-quart-end {
+    left: 320px;
+    top: 276px;
+}
+.background-masker.content-fifth-line {
+    top: 271px;
+}
+</style>
+    </head>
+    <body class="edit-dashboard editor_api2">
+        <div class="main-content">
+    <div class="menu-overlay"></div>
+    <nav class="menu-global">
+        <a href="/" class="site-logo"></a>
+        <div class="main-menu-wrapper">
+            <ul id="main-menu" class="main-menu"></ul>
+        </div>
+    </nav>
+    <div class="post-edit-mode">
+        <div class="mdc-toolbar mdc-toolbar--fixed theme--custom-dark-bg">
+            <div class="edit-mode-header mdc-toolbar__row">
+                <div class="mdc-toolbar__section mdc-toolbar__section--align-start">
+                    <i class="material-icons mdc-toolbar__icon--menu menu-show"> menu</i>
+                    <div class="mdc-toolbar__title"></div>
+                </div>
+                <div class="mdc-toolbar__section mdc-toolbar__section--align-end publish-story"></div>
+            </div>
+        </div>
+        <div class="edit-mode-header--fake"></div>
+        <div class="edit-mode-content">
+            <div class="js-upload-media"></div>
+            <div id="change-story" class="change-story content-item">{{content_section|safe}}</div>
+            <div class="change-story__extentions">
+                <div class="change-story__navigation-wrap">
+                    <ul class="change-story__navigation"></ul>
+                </div>
+                <div class="change-story__extentions-col extentions-col">
+                    <!--{# return the tabs from server so there is no empty blocks while we are loading JS #}-->
+                    <ul class="change-story__navigation"><li class="main-menu-item main-menu-item--publish active"><div>
+                        <a class="link" href="#">
+                            <i class="ico publish-to"></i>
+                            <span class="item-link">Publish To</span>
+                        </a>
+                        </div>
+                    </li><li class="main-menu-item main-menu-item--scheduling"><div>
+                        <a class="link" href="#">
+                            <i class="ico social-scheduling"></i>
+                            <span class="item-link">Scheduling</span>
+                        </a>
+                        </div>
+                    </li><li class="main-menu-item main-menu-item--social"><div>
+                        <a class="link" href="#">
+                            <i class="ico social"></i>
+                            <span class="item-link">Social</span>
+                        </a>
+                        </div>
+                    </li><li class="main-menu-item main-menu-item--seo"><div>
+                        <a class="link" href="#">
+                            <i class="ico seo"></i>
+                            <span class="item-link">SEO</span>
+                        </a>
+                        </div>
+                    </li><li class="main-menu-item main-menu-item--cta"><div>
+                        <a class="link" href="#">
+                            <i class="ico cta"></i>
+                            <span class="item-link">Call to Action</span>
+                        </a>
+                        </div>
+                    </li><li class="main-menu-item main-menu-item--teaser"><div>
+                        <a class="link" href="#">
+                            <i class="ico teaser"></i>
+                            <span class="item-link">Teaser</span>
+                        </a>
+                        </div>
+                    </li><li class="main-menu-item main-menu-item--advanced"><div>
+                        <a class="link" href="#">
+                            <i class="ico advanced"></i>
+                            <span class="item-link">Advanced</span>
+                        </a>
+                        </div>
+                    </li><li class="main-menu-item main-menu-item--history"><div>
+                        <a class="link" href="#">
+                            <i class="ico history"></i>
+                            <span class="item-link">Post History</span>
+                        </a>
+                        </div>
+                    </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </body>
+</html>
