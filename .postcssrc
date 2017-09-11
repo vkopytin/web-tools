@@ -1,0 +1,19 @@
+{
+  "map": true,
+  "plugins": {
+    "postcss-import": {},
+    "postcss-cssnext": {
+      "features": {
+        "customProperties": {
+          "__comments__": "This is to ignore nextcss errors here: ./static/js/libs/mdc-web/material-components-web.min.css",
+          "warnings": false,
+          "variables": {
+            "--mdc-theme-primary": "#000000",
+            "--mdc-theme-accent": "#479ad2"
+          }
+        }
+      }
+    },
+    "postcss-nested": {}
+  }
+}

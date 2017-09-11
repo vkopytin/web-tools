@@ -1,0 +1,55 @@
+@import "material-components-web/dist/material-components-web.css";
+
+.sidebar {
+    background-color: #fff;
+    font-family: inherit;
+    width: 40%;
+    right: 0;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0 0 64px 0;
+    transition: all .4s cubic-bezier(.7,0,.3,1);
+    z-index: 10000001;
+    -webkit-transition: all 0.4s cubic-bezier(0.7,0,0.3,1);
+    -moz-transition: all 0.4s cubic-bezier(0.7,0,0.3,1);
+    transition: all 0.4s cubic-bezier(0.7,0,0.3,1);
+}
+
+.sidebar--shadow {
+    -webkit-box-shadow: -5px -2px 20px rgba(0,0,0,.5);
+    -moz-box-shadow: -5px -2px 20px rgba(0,0,0,.5);
+    box-shadow: -5px -2px 20px rgba(0,0,0,.5);
+}
+.sidebar .content {
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+}
+
+img.rm-shortcode {
+    width: 100%;
+}
+
+.sites-menu:focus .mdc-simple-menu {
+    display: inline-block;
+    visibility: visible;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+    right: 0px;
+}
+
+.sites-menu:focus .mdc-simple-menu .mdc-simple-menu__items>* {
+    opacity: 1;
+    will-change: opacity;
+}
+
+.sites-menu .mdc-simple-menu {
+    visibility: hidden;
+    transition: visibility 0.5s;
+}

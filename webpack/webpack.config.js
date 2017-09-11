@@ -19,11 +19,11 @@ const CDN_PATH = process.env.CDN;
 const ip = process.env.APP_IP || '0.0.0.0'
 const port = (+process.env.APP_PORT) || 3001
 const DEBUG = ['production', 'alpha', 'beta', 'dev'].indexOf(process.env.NODE_ENV) === -1
-var PUBLIC_DIR = 'build';
+var PUBLIC_DIR = 'build/prod';
 if (process.env.NODE_ENV === 'alpha') {
-  PUBLIC_DIR = 'entry-editor/alpha';
+  PUBLIC_DIR = 'build/alpha';
 } else if (process.env.NODE_ENV === 'beta') {
-  PUBLIC_DIR = 'entry-editor/beta';
+  PUBLIC_DIR = 'build/beta';
 } else if (process.env.NODE_ENV === 'dev') {
   PUBLIC_DIR = 'entry-editor/dev';
 }
@@ -49,7 +49,8 @@ const config = {
     // enable require('<module-name>') to look into respected path
     alias: {
       app: path.resolve(__dirname, '..', 'src', 'app'),
-    }
+    },
+    extensions: ['.ts', '.tsx', '.js']
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -79,21 +80,33 @@ const config = {
     }),
   ],
   module: {
-    rules: [
-      { test: /.tsx?$/, loaders: ['babel-loader', 'awesome-typescript-loader'], exclude: /node_modules/ },
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.mustache$/, loader: 'mustache-loader' },
-      { test: /\.css$/, loader: DEBUG ? `style-loader!${cssLoaderConfig}` : ExtractTextPlugin.extract({ fallback: 'style-loader', use: cssLoaderConfig }) },
-      { test: /\.json$/, loader: 'json-loader?name=[path][name]-[hash].[ext]' },
-      { test: /\.png$/, loader: 'file-loader?name=[path][name]-[hash].[ext]' },
-      { test: /\.jpg$/, loader: 'file-loader?name=[path][name]-[hash].[ext]' },
-      { test: /\.svg$/, loader: 'file-loader?name=[path][name]-[hash].[ext]' },
-      { test: /\.gif$/, loader: 'file-loader?name=[path][name]-[hash].[ext]' },
-      { test: /\.woff$/, loader: 'file-loader?name=[path][name]-[hash].[ext]' },
-      { test: /\.woff2$/, loader: 'file-loader?name=[path][name]-[hash].[ext]' },
-      { test: /\.ttf$/, loader: 'file-loader?name=[path][name]-[hash].[ext]' },
-      { test: /\.eot$/, loader: 'file-loader?name=[path][name]-[hash].[ext]' }
-    ]
+    rules: [{
+      test: /\.tsx?$/, loaders: ['babel-loader', 'ts-loader'], exclude: /node_modules/
+    }, {
+      test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/
+    }, {
+      test: /\.mustache$/, loader: 'mustache-loader'
+    }, {
+      test: /\.css$/, loader: 'DEBUG' ? `style-loader!${cssLoaderConfig}` : ExtractTextPlugin.extract({ fallback: 'style-loader', use: [cssLoaderConfig] })
+    }, {
+      test: /\.json$/, loader: 'json-loader?name=[path][name]-[hash].[ext]'
+    }, {
+      test: /\.png$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
+    }, {
+      test: /\.jpg$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
+    }, {
+      test: /\.svg$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
+    }, {
+      test: /\.gif$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
+    }, {
+      test: /\.woff$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
+    }, {
+      test: /\.woff2$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
+    }, {
+      test: /\.ttf$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
+    }, {
+      test: /\.eot$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
+    }]
   }
 }
 

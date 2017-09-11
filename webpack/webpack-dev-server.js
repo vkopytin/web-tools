@@ -19,8 +19,8 @@ new WebpackDevServer(webpack(config), {
   host: ip,
   stats: false,
   historyApiFallback: true,
-  https: true, // make upload image working over proxy requests, since request comes to hardcoded https
-  contentBase: 'public',
+  https: false, // make upload image working over proxy requests, since request comes to hardcoded https
+  contentBase: ['public', 'build'],
   compress: true,
   headers: {
     'Access-Control-Allow-Origin': '*'
@@ -46,6 +46,15 @@ new WebpackDevServer(webpack(config), {
       proxyReq.setHeader('Cookie', `sessionid=${SESSIONID}; _gat=1`);
     }
   }, '/api/': {
+    target: process.env.PROXY_TARGET,
+    changeOrigin: true,
+    logLevel: 'debug',
+    secure: true,
+    cookieDomainRewrite: true,
+    onProxyReq: (proxyReq, req) => {
+      proxyReq.setHeader('Cookie', `sessionid=${SESSIONID}; _gat=1`);
+    }
+  }, '/search': {
     target: process.env.PROXY_TARGET,
     changeOrigin: true,
     logLevel: 'debug',
