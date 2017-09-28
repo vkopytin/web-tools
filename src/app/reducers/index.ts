@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';  
-import { posts, getDomainUrl, getSearchTerm } from './posts'
+import { posts, getDomainUrl, getSecureDomainUrl, getSearchTerm } from './posts'
 export { initialState } from './initialState';
 
 const rootReducer = combineReducers({  
@@ -7,4 +7,4 @@ const rootReducer = combineReducers({
     sites: (state = {}) => state
 })
 
-export { rootReducer, getDomainUrl, getSearchTerm };
+export { rootReducer, getDomainUrl, getSearchTerm, getSecureDomainUrl };

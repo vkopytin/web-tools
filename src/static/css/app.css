@@ -35,7 +35,7 @@ img.rm-shortcode {
     width: 100%;
 }
 
-.sites-menu:focus .mdc-simple-menu {
+.sites-menu:focus+.mdc-simple-menu {
     display: inline-block;
     visibility: visible;
     -webkit-transform: scale(1);
@@ -44,12 +44,17 @@ img.rm-shortcode {
     right: 0px;
 }
 
-.sites-menu:focus .mdc-simple-menu .mdc-simple-menu__items>* {
+.sites-menu:focus+.mdc-simple-menu .mdc-simple-menu__items>* {
     opacity: 1;
     will-change: opacity;
 }
 
-.sites-menu .mdc-simple-menu {
+.sites-menu+.mdc-simple-menu {
+    display: inline-block;
     visibility: hidden;
-    transition: visibility 0.5s;
+    transition: visibility 0.5s, scale 0.5s, opacity 0.5s, transform 0.01s linear 0.2s;
+}
+
+.mdc-card img {
+    max-width: 100%;
 }

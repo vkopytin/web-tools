@@ -9,6 +9,7 @@ import { template } from './main.tpl';
 
 function mapStateToProps(state) {
     return {
+        url: state.posts.url,
         posts: state.posts.items,
         sites: state.sites.items,
         search: state.posts.search,
@@ -32,6 +33,10 @@ class MainView extends React.Component<any, any> {
         this.state = _.extend({}, this.state, {
             isFocused: false
         });
+    }
+
+    componentWillMount() {
+        this.props.actions.loadPosts();
     }
 
     onFocus (e) {
