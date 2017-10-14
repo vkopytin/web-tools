@@ -1,60 +1,56 @@
 import * as _ from 'underscore';
-import * as React from 'react';
-import { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as posts from '../actions/posts';
-import { template } from './main.tpl';
+import * as $ from 'jquery';
+import * as BB from 'backbone';
+import { initialState } from '../initialState';
+import { Store, Action } from '../store';
+import { render } from '../templates/main.tpl';
+import { patch } from 'incremental-dom';
 
 
-function mapStateToProps(state) {
-    return {
-        url: state.posts.url,
-        posts: state.posts.items,
-        sites: state.sites.items,
-        search: state.posts.search,
-        pending: state.posts.pending
-    };
-}
+const MainView = BB.View.extend({
+    events: {
+        'input .search-post': 'searchPost',
+        'click .site': 'updateDomainUrl' // think about it...
+    },
+    initialize: function () {
+        this.model = new BB.Model(initialState); // this
+        this.listenTo(this.model, 'change', this.render);
+    },
+    searchPost: function (evnt) {
+        evnt && evnt.preventDefault();
+        var value = this.$(evnt.currentTarget).val();
+        this.model.set('searchPost', value);
+    },
+    updateDomainUrl: function (evnt) {
+        evnt && evnt.preventDefault();
+        var id = this.$(evnt.currentTarget).data('id');
 
-function mapDispatchToProps(dispatch) {
-    return {
-        actions: bindActionCreators<any>(posts, dispatch)
-    };
-}
+        this.model.set('currentSite', this.model.get('sites')[id]);
+    },
+    render: function () {
+        var data = this.model.toJSON();
 
-@connect(mapStateToProps, mapDispatchToProps)
-class MainView extends React.Component<any, any> {
-    props: { posts: any, actions: any }
-    state: any
+        patch(this.el, () => render({
+            sites: _.values(data.sites),
+            currentSite: data.currentSite,
+            state: {
+                pending: false,
+                posts: []
+            },
+            searchPost: data.searchPost
+        }));
 
-    constructor(props) {
-        super(props);
-        this.state = _.extend({}, this.state, {
-            isFocused: false
-        });
+        return this;
     }
+});
 
-    componentWillMount() {
-        this.props.actions.loadPosts();
+const ViewModel = BB.Router.extend({
+    getSites: function () {
+        return initialState.sites;
+    },
+    setSites: function () {
+        this.trigger('change:Sites');
     }
+});
 
-    onFocus (e) {
-        this.setState({
-            isFocused: true
-        });
-    }
-
-    onBlur(e) {
-        this.setState({
-            isFocused: false
-        });
-    }
-
-    render() {
-        const { posts, actions } = this.props;
-        return template(this.props, this.props.actions, this); 
-    }
-}
-
-export { MainView }
+export { MainView };

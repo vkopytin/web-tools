@@ -13,6 +13,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const cssnano = require('cssnano')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const BabiliPlugin = require('babili-webpack-plugin')
+const IDom = require('babel-plugin-transform-incremental-dom')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const CDN_PATH = process.env.CDN;
@@ -32,7 +33,8 @@ if (process.env.NODE_ENV === 'alpha') {
 
 // resolve-url-loader is required in order to process css url(...) declarations agains global root
 // for the case when the same css module is required in JS and used over @import in CSS
-const cssLoaderConfig = 'css-loader?minimize=1?importLoaders=1!resolve-url-loader!postcss-loader'
+//const cssLoaderConfig = 'css-loader?minimize=1?importLoaders=1!resolve-url-loader!postcss-loader'
+const cssLoaderConfig = 'css-loader?importLoaders=1!resolve-url-loader!postcss-loader'
 
 const config = {
   devtool: DEBUG ? 'eval' : ['alpha'].indexOf(process.env.NODE_ENV) === -1 ? false : 'source-map',
@@ -45,12 +47,12 @@ const config = {
     filename: '[name].js?hash=[hash]'
   },
   resolve: {
-    modules: ['src', 'static/js', 'static/css', 'static/img', 'node_modules'],
+    modules: ['src', 'static/js', 'static/css', 'static/images', 'static/less', 'node_modules'],
     // enable require('<module-name>') to look into respected path
     alias: {
       app: path.resolve(__dirname, '..', 'src', 'app'),
     },
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.less']
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -83,15 +85,24 @@ const config = {
     rules: [{
       test: /\.tsx?$/, loaders: ['babel-loader', 'ts-loader'], exclude: /node_modules/
     }, {
-      test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/
+      test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/
     }, {
       test: /\.mustache$/, loader: 'mustache-loader'
     }, {
       test: /\.css$/, loader: 'DEBUG' ? `style-loader!${cssLoaderConfig}` : ExtractTextPlugin.extract({ fallback: 'style-loader', use: [cssLoaderConfig] })
     }, {
+      test: /\.less$/,
+      use: [{
+          loader: "style-loader" // creates style nodes from JS strings
+      }, {
+          loader: "css-loader" // translates CSS into CommonJS
+      }, {
+          loader: "less-loader" // compiles Less to CSS
+      }]
+    }, {
       test: /\.json$/, loader: 'json-loader?name=[path][name]-[hash].[ext]'
     }, {
-      test: /\.png$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
+      test: /\.png$/, loader: 'url-loader?name=[path][name]-[hash].[ext]&mimetype=image/png'
     }, {
       test: /\.jpg$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
     }, {
@@ -103,7 +114,7 @@ const config = {
     }, {
       test: /\.woff2$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
     }, {
-      test: /\.ttf$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
+      test: /\.ttf$/, loader: 'url-loader?name=[path][name]-[hash].[ext]&mimetype=application/font-sfnt'
     }, {
       test: /\.eot$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
     }]

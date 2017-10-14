@@ -1,0 +1,23 @@
+{
+    "presets": [
+      ["env", {
+        "targets": {
+          "browsers": ["last 2 versions", "safari >= 7"]
+        }
+      }],
+      "stage-1"
+    ],
+    "plugins": [
+      "lodash",
+      [
+        "transform-incremental-dom", {
+          "requireStaticsKey": true,
+          "inlineExpressions": true,
+          "fastRoot": true,
+          "components": true,
+          "moduleSource": "incremental-dom"
+        }
+      ]
+    ]
+  }
+  

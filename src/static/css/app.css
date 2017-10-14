@@ -1,4 +1,5 @@
-@import "material-components-web/dist/material-components-web.css";
+/*@import "material-components-web/dist/material-components-web.css";*/
+@import 'style.css';
 
 .sidebar {
     background-color: #fff;
@@ -31,8 +32,11 @@
     overflow: auto;
 }
 
-img.rm-shortcode {
-    width: 100%;
+card img {
+    width: calc(100% + 4rem);
+    max-width: none;
+    margin: 0 0 2rem -2rem;
+    display: block;
 }
 
 .sites-menu:focus+.mdc-simple-menu {
@@ -55,6 +59,14 @@ img.rm-shortcode {
     transition: visibility 0.5s, scale 0.5s, opacity 0.5s, transform 0.01s linear 0.2s;
 }
 
-.mdc-card img {
-    max-width: 100%;
+.mdc-grid-tile__primary-content {
+    height: 300px;
+}
+
+p img.rm-shortcode {
+    width: 100%;
+}
+
+img.rm-shortcode~small {
+    display: block;
 }
