@@ -51,8 +51,9 @@ const config = {
     // enable require('<module-name>') to look into respected path
     alias: {
       app: path.resolve(__dirname, '..', 'src', 'app'),
+      '~': path.resolve(__dirname, '..', 'src')
     },
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.less']
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.mustache', '.less']
   },
   plugins: [
     new webpack.DefinePlugin({

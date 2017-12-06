@@ -1,0 +1,7 @@
+/*@import "material-components-web/dist/material-components-web.css";*/
+@import 'style.css';
+
+*, body {
+    margin: 0;
+    padding: 0;
+}

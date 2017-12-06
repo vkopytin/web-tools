@@ -11,11 +11,12 @@
       "lodash",
       [
         "transform-incremental-dom", {
-          "requireStaticsKey": true,
-          "inlineExpressions": true,
-          "fastRoot": true,
+          "requireStaticsKey": false,
+          "inlineExpressions": false,
+          "fastRoot": false,
           "components": true,
-          "moduleSource": "incremental-dom"
+          "moduleSource": "incremental-dom",
+          "skipAttribute": "__skip"
         }
       ]
     ]
