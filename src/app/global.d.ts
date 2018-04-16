@@ -5,4 +5,8 @@ declare module '*.mustache' {
 
 interface JQueryStatic {
     ui: any; // Replace with your types
-  }
+}
+
+interface JQuery {
+    sortable: any;
+}

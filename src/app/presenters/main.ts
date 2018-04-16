@@ -44,13 +44,15 @@ class MainPresenter {
 
     tracks (playlistId) {
         var items = this._tracks;
-        var user = this._playlists.get(playlistId).get('owner');
-        var fetch = async () => {
-            var tracks: { [items: string] : any } = await SpotifyAPI.tracks(user.id, playlistId);
+        if (this._playlists.length > 0) {
+            var user = this._playlists.get(playlistId).get('owner');
+            var fetch = async () => {
+                var tracks: { [items: string]: any } = await SpotifyAPI.tracks(user.id, playlistId);
 
-            items.reset(tracks.items);
-        };
-        fetch();
+                items.reset(tracks.items);
+            };
+            fetch();
+        }    
         return items;
     }
 

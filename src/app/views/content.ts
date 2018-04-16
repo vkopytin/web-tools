@@ -2,24 +2,39 @@ import * as _ from 'underscore';
 import * as $ from 'jquery';
 import * as BB from 'backbone';
 import { ToolBar } from './toolbar';
+import { MainPresenter } from '../presenters/main';
+import { debounce, events } from '../utils/bbUtils';
+import template = require('../templates/content.mustache');
 
-const template = require('../templates/content');
 
-const Content = BB.View.extend({
-    views: {
-    },
-    initialize: function (options) {
+namespace Content {
+    export interface IOptions extends BB.ViewOptions<any> {
+        api: MainPresenter;
+        playback: any
+    }
+}
+
+interface Content {
+    playback: any;
+    toolbar: ToolBar;
+}
+
+class Content extends BB.View<any> {
+    constructor(options: Content.IOptions) {
+        super(options);
+    }
+    initialize(options) {
         this.playback = options.playback;
         this.listenTo(this.playback, 'change', this.render);
-    },
-    toHTML: function () {
+    }
+    toHTML() {
         return template(_.extend({
             cid: this.cid,
             user: this.model.toJSON(),
             playback: this.playback.toJSON()
         }));
-    },
-    render: function () {
+    }
+    render() {
         var html = this.toHTML();
 
         this.$el.html(html);
@@ -30,6 +45,6 @@ const Content = BB.View.extend({
 
         return this;
     }
-});
+}
 
 export { Content };

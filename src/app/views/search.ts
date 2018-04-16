@@ -3,23 +3,37 @@ import * as $ from 'jquery';
 import * as BB from 'backbone';
 import { Format } from '../utils/format';
 import { TrackItem } from './trackItem';
-
+import { MainPresenter } from '../presenters/main';
+import { debounce, events } from '../utils/bbUtils';
 const template = require('../templates/search');
 
-const Search = BB.View.extend({
-    events: {
-        'input .search-term': 'search'
-    },
-    initialize: function (options) {
+
+
+namespace Search {
+    export interface IOptions extends BB.ViewOptions<any> {
+        api: MainPresenter;
+    }
+}
+@events({
+    'input .search-term': 'search'
+})
+class Search extends BB.View<any> {
+    constructor(options: Search.IOptions) {
+        super(options);
+    }
+    api: MainPresenter;
+    items = [];
+    initialize(options) {
         this.api = options.api;
         this.listenTo(this.collection, 'reset', this.drawItems);
-    },
-    search: _.debounce(function (evnt) {
+    }
+    @debounce(500)
+    search (evnt) {
         var value = this.$('.search-term').val();
         this.$el.trigger('loading');
         this.api.search(value);
-    }, 500),
-    toHTML: function () {
+    }
+    toHTML() {
         return template(_.extend({
             cid: this.cid,
             searchTerm: this.$('.search-term').val(),
@@ -28,8 +42,8 @@ const Search = BB.View.extend({
                 return Format.duration(this.duration_ms / 1000);
             }
         }));
-    },
-    drawItem: function (model) {
+    }
+    drawItem(model) {
         var view = new TrackItem({
             tagName: 'li',
             className: 'table-view-cell media',
@@ -38,13 +52,16 @@ const Search = BB.View.extend({
         });
         this.$('ul').append(view.$el);
         view.render();
-    },
-    drawItems: function () {
-        this.$('ul').empty();
+        this.items.push(view);
+    }
+    drawItems() {
+        const items = [].slice.call(this.items, 0);
+        _.defer(() => _.invoke(items, 'remove'));
+        this.items = [];
         this.collection.each(this.drawItem, this);
         this.$el.trigger('loaded');
-    },
-    render: function () {
+    }
+    render() {
         var html = this.toHTML();
 
         this.$el.html(html);
@@ -52,6 +69,6 @@ const Search = BB.View.extend({
 
         return this;
     }
-});
+}
 
 export { Search };

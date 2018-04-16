@@ -1,27 +1,35 @@
 import * as _ from 'underscore';
 import * as $ from 'jquery';
 import * as BB from 'backbone';
+import { MainPresenter } from '../presenters/main';
+import template = require('../templates/profile.mustache');
 
-const template = require('../templates/profile');
 
-const Profile = BB.View.extend({
-    views: {
-    },
-    initialize: function () {
+namespace Profile {
+    export interface IOptions extends BB.ViewOptions<any> {
+        api: MainPresenter;
+    }
+}
+
+class Profile extends BB.View<any> {
+    constructor(options: Profile.IOptions) {
+        super(options);
+    }
+    initialize() {
         console.log('Profile: Initialize');
-    },
-    toHTML: function () {
+    }
+    toHTML() {
         return template(_.extend({
             cid: this.cid
-        }, this.views));
-    },
-    render: function () {
+        }));
+    }
+    render() {
         var html = this.toHTML();
 
         this.$el.html(html);
 
         return this;
     }
-});
+}
 
 export { Profile };

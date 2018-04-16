@@ -1,18 +1,33 @@
 import * as _ from 'underscore';
 import * as $ from 'jquery';
 import * as BB from 'backbone';
+import { MainPresenter } from '../presenters/main';
+import { debounce, events } from '../utils/bbUtils';
+import template = require('../templates/login.mustache');
 
-const template = require('../templates/login');
 
+namespace Login {
+    export interface IOptions extends BB.ViewOptions<any> {
+        api: MainPresenter;
+    }
+}
 
-const Login = BB.View.extend({
-    events: {
-        'click .profile-login': 'profileLogin'
-    },
-    initialize: function (options) {
+interface Login {
+    api: MainPresenter;
+}
+
+@events({
+    'click .profile-login': 'profileLogin'
+})
+class Login extends BB.View<any> {
+    constructor(options: Login.IOptions) {
+        super(options)
+    }
+
+    initialize(options) {
         this.api = options.api;
-    },
-    profileLogin: async function (evnt) {
+    }
+    async profileLogin (evnt) {
         var username = this.$('.login-username').val(),
             password = this.$('.login-password').val();    
         evnt && evnt.preventDefault();
@@ -20,13 +35,13 @@ const Login = BB.View.extend({
         await this.api.login(username, password);
         this.$('.modal').toggleClass('active');
         BB.history.navigate('/', true);
-    },
-    toHTML: function () {
+    }
+    toHTML() {
         return template(_.extend({
             cid: this.cid
-        }, this.views));
-    },
-    render: function () {
+        }));
+    }
+    render() {
         var html = this.toHTML();
 
         this.$el.html(html);
@@ -35,6 +50,6 @@ const Login = BB.View.extend({
 
         return this;
     }
-});
+}
 
 export { Login };

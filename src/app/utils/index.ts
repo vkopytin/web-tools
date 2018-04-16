@@ -109,11 +109,16 @@ const parse_url = function (url) {
   };
 };
 
+import * as bbUtils from './bbUtils';
+import { Format } from './format';
+
 export {
-    gid2id,
-    id2uri,
-    uri2id,
-    gid2uri,
+  gid2id,
+  id2uri,
+  uri2id,
+  gid2uri,
   uriType,
-    parse_url
+  parse_url,
+  bbUtils,
+  Format
 };
