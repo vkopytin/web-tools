@@ -86,7 +86,7 @@ const SpotifyAPI = {
     readAccessToken: function () {
         var cookiesObj = cookie.parse(document.cookie),
             getArgs = window.location.hash.replace(/^#/gi, '').split('&'),
-            args = _.reduce(getArgs, (res, line) => {
+            args: {[key: string]: string} = _.reduce(getArgs, (res, line) => {
                 var pair = line.split('=');
 
                 res[$.trim(pair[0])] = $.trim(pair[1]);

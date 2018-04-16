@@ -7,7 +7,7 @@ import 'jquery-ui/ui/widgets/sortable';
 
 import { TrackItem } from './trackItem';
 
-const template = require('../templates/tracks');
+import template = require('../templates/tracks.mustache');
 
 const Tracks = BB.View.extend({
     items: [],

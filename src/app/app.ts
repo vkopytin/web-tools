@@ -33,7 +33,7 @@ const App = BB.Router.extend({
     },
 
     findSpace: function (spaces, name) {
-        return _.find(spaces, (v, k) => (k.replace(/Space$/i, '').toLowerCase() === name.toLowerCase()));
+        return _.find(spaces, (v, k: string) => (k.replace(/Space$/i, '').toLowerCase() === name.toLowerCase()));
     },
 
     createSpace: function (name) {

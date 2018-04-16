@@ -1,6 +1,8 @@
 declare module '*.mustache' {
-    const content: any;
-    export default content;
+    function content(...args): string;
+    export=content;
 }
 
-declare function require(id: string): any;
+interface JQueryStatic {
+    ui: any; // Replace with your types
+  }
