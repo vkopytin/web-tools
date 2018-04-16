@@ -1,0 +1,36 @@
+<header class="bar bar-nav">
+  <button class="btn btn-link btn-nav pull-left">
+    <span class="icon icon-left-nav"></span>
+  </button>
+  <button class="btn btn-link btn-nav pull-right">
+    <span class="icon icon-right-nav"></span>
+  </button>
+  <div class="segmented-control">
+    <a class="control-item active">all</a>
+    <a class="control-item">album</a>
+    <a class="control-item">artist</a>
+    <a class="control-item">playlist</a>
+    <a class="control-item">track</a>
+  </div>
+</header>
+<!-- Block button in standard bar fixed below top bar -->
+<div class="bar bar-standard bar-header-secondary">
+  <form>
+   <input class="search-term" type="search" placeholder="Search" value="{{searchTerm}}" />
+  </form>
+</div>
+<div class="content">
+<ul class="table-view">
+{{#result.items}}
+  <li class="table-view-cell media">
+    <img class="media-object pull-left" src="{{album.images.2.url}}" height="64">
+    <div class="media-body">
+        {{name}} - {{album.name}}
+        <p>{{artists.0.name}}</p>
+        <audio controls src="{{preview_url}}"></audio>
+    </div>
+    <span class="badge">{{duration}}</span>
+  </li>
+{{/result.items}}
+</ul>
+</div>

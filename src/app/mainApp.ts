@@ -1,6 +1,8 @@
 import '../css/app.css';
-import { MainView } from './views/main';
+import * as BB from 'backbone';
+import { App } from './app';
 
-new MainView({
-    el: document.body
-}).render();
+(function () {
+    new App();
+    BB.history.start({ pushState: true });
+})();

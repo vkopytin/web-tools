@@ -5,20 +5,11 @@
           "browsers": ["last 2 versions", "safari >= 7"]
         }
       }],
-      "stage-1"
+      "es2015"
     ],
     "plugins": [
       "lodash",
-      [
-        "transform-incremental-dom", {
-          "requireStaticsKey": false,
-          "inlineExpressions": false,
-          "fastRoot": false,
-          "components": true,
-          "moduleSource": "incremental-dom",
-          "skipAttribute": "__skip"
-        }
-      ]
+      "transform-async-to-generator"
     ]
   }
   

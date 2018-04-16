@@ -3,7 +3,7 @@
         "experimentalDecorators": true,
         "moduleResolution": "node",
         "module": "commonjs",
-        "target": "es5",
+        "target": "es6",
         "noImplicitAny": false,
         "sourceMap": false,
         "jsx": "react",
@@ -11,5 +11,8 @@
     },
     "exclude": [
         "node_modules"
+    ],
+    "filesGlob": [
+        "./src/*.d.ts"
     ]
 }

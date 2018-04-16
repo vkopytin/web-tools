@@ -39,7 +39,7 @@ const cssLoaderConfig = 'css-loader?importLoaders=1!resolve-url-loader!postcss-l
 const config = {
   devtool: DEBUG ? 'eval' : ['alpha'].indexOf(process.env.NODE_ENV) === -1 ? false : 'source-map',
   entry: {
-    app: [path.join(__dirname, '../src/app/mainApp.ts')],
+    app: ['babel-polyfill', path.join(__dirname, '../src/app/mainApp.ts')]
   },
   output: {
     publicPath: DEBUG ? '/' : CDN_PATH + PUBLIC_DIR + '/',
@@ -119,7 +119,8 @@ const config = {
     }, {
       test: /\.eot$/, loader: 'file-loader?name=[path][name]-[hash].[ext]'
     }]
-  }
+  },
+  node: { fs: 'empty' }
 }
 
 if (DEBUG) {

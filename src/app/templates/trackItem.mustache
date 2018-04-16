@@ -1,0 +1,18 @@
+
+{{#track}}
+<span class="drag-handler media-object pull-left icon icon-more-vertical"></span>
+<div class="media-object pull-left" style="position: relative;">
+    <img src="{{album.images.2.url}}" height="64"/>
+    {{#preview_url}}
+    <span class="btn--play icon icon-play preview-play"></span>
+    <span class="btn--play icon icon-pause preview-stop hidden"></span>
+    {{/preview_url}}
+</div>
+<div class="media-body">
+    {{name}}
+    <p>{{album.name}}</p>
+    <p>{{artists.0.name}}</p>
+</div>
+<span class="badge">{{duration}}</span>
+{{#preview_url}}<video class="track-preview hidden" src="{{preview_url}}"/>{{/preview_url}}
+{{/track}}
