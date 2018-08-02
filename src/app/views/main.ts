@@ -55,18 +55,19 @@ class MainView extends BB.View<any> {
         }
         this.showSpinner();
         modal = this.content = view;
-        this.$('.modal-region').html(view.render().el);
+        this.$('.modal-region').html(view.el);
+        view.render();
         this.hideSpinner();
     }
     setContent (view) {
         this.$('.modal-region').toggleClass('active', false);
-        var content = this.content;
-        if (this.content) {
-            this.content.remove();
+        const content = this.content;
+        if (content) {
+            _.result(content, 'close', () => content.remove());
         }
         this.showSpinner();
-        content = this.content = view;
-        this.$('.main').html(view.el);
+        this.content = view;
+        this.$('.main').prepend(view.el);
         view.render();
         this.hideSpinner();
     }

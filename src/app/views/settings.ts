@@ -18,6 +18,15 @@ class Settings extends BB.View<any> {
     }
     initialize() {
         console.log('Profile: Initialize');
+        this.listenTo(this.model, 'change', this.render);
+    }
+    close() {
+        this.$('.content')
+            .toggleClass('right', true);
+        _.delay(() => {
+            this.remove();
+        }, 500);
+        return this;
     }
     toHTML() {
         return template(_.extend({
@@ -28,6 +37,13 @@ class Settings extends BB.View<any> {
         var html = this.toHTML();
 
         this.$el.html(html);
+        this.$('.content')
+            .toggleClass('hidden', false);
+
+        _.delay(() => {
+            this.$('.content')
+                .toggleClass('left', false);
+        });
 
         return this;
     }

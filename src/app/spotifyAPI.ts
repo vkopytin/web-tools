@@ -1,6 +1,7 @@
 import * as $ from 'jquery';
 import * as _ from 'underscore';
 import * as cookie from 'cookie';
+import { setCookie, getCookie } from './utils/cookie';
 
 const APP_KEY = '963f916fa62c4186a4b8370e16eef658';
 //const APP_KEY = 'cd68cfa0ace62ecda7a1db90a515d7e30dd6976b';
@@ -14,11 +15,13 @@ const TRACK_SORT_URL = 'https://api.spotify.com/v1/users/{user_id}/playlists/{pl
 const USER_PLAYER_PLAY_URL = 'https://api.spotify.com/v1/me/player/play';
 const USER_PLAYER_STATUS_URL = 'https://api.spotify.com/v1/me/player';
 const SEARCH_URL = 'https://api.spotify.com/v1/search';
-
+const DEVICES_URL = 'https://api.spotify.com/v1/me/player/devices';
+const USER_PLAYER_PAUSE_URL = 'https://api.spotify.com/v1/me/player/pause';
 var accessToken;
 
 
 const SpotifyAPI = {
+    device_id: getCookie('device_id'),
     login: function (username, password) {
         var accessToken = this.readAccessToken();
 
@@ -34,11 +37,11 @@ const SpotifyAPI = {
                         resolve(response);
                     },
                     error: function () {
-                        this.redirectToLogin(username, password);
+                        this.redirectToLogin1(username, password);
                     }
                 });
             } else {
-                this.redirectToLogin(username, password);
+                this.redirectToLogin1(username, password);
             }
         });
     },
@@ -67,8 +70,8 @@ const SpotifyAPI = {
         var loginData = {
             client_id: APP_KEY,
             response_type: 'token',
-            redirect_uri: 'http://localhost:3010/login',
-            scope: 'streaming user-modify-playback-state user-read-private user-read-email playlist-read-private playlist-modify-public playlist-modify-private user-library-read user-library-modify user-read-playback-state',
+            redirect_uri: location.href, //'http://localhost:3010/login',
+            scope: 'user-read-birthdate user-read-email streaming user-modify-playback-state user-read-private user-read-email playlist-read-private playlist-modify-public playlist-modify-private user-library-read user-library-modify user-read-playback-state user-read-recently-played',
             state: +Date()
         };
 
@@ -78,7 +81,7 @@ const SpotifyAPI = {
         var loginData = {
             username: username,
             password: password,
-            redirect_uri: 'http://localhost:3010/login'
+            redirect_uri: location.href //'http://localhost:3010/login'
         };
 
         window.location.replace([AUTH_URL2, $.param(loginData)].join('?'));
@@ -99,22 +102,25 @@ const SpotifyAPI = {
         }
         
         if (args.access_token) {
+            setCookie('wp_access_token', args.access_token, 90);
             return accessToken = args.access_token;
             //return accessToken = "BQDLurTpA58H76eEe7bE-qpcXzE6SB6FERHDWXKKpB2kT4aehMgdCHl2W2YHSpR3MPllYJ4RlRHK3B944bRyX4Nm9qwcpPc2eZ3eR2lgSUA3JRsDbZ5dCDcJjzEgPlsGY2mneeKsfck21IObrxFtg4qzAugdyqAtL-kfTccVoOOOxRJrokIpFpS9lrMiAhYkFagF_pv7G6f7Gb4Vl7zOSYVwp_rX0RlC69I2iBEU-Jy6VgUmHIkW19pWTeA-md0R37i7gTl-kUc";
         }
 
         return accessToken;
     },
-    search: function (term, type?) {
+    search: function (term, type?, limit?) {
         var url = SEARCH_URL,
-            type = type || 'album,artist,playlist,track';
+            type = type || 'album,artist,playlist,track',
+            limit = limit || 50;
 
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: url,
                 data: {
                     q: term,
-                    type: type
+                    type: type,
+                    limit: limit
                 },
                 headers: {
                     'Authorization': 'Bearer ' + accessToken
@@ -202,7 +208,7 @@ const SpotifyAPI = {
 
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: url,
+                url: url + `?device_id=${this.device_id}`,
                 headers: {
                     'Authorization': 'Bearer ' + accessToken
                 },
@@ -218,12 +224,34 @@ const SpotifyAPI = {
         });
     },
 
+    playTracks: function (trackUris, offset) {
+        var url = USER_PLAYER_PLAY_URL;
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: url + `?device_id=${this.device_id}`,
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken
+                },
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    uris: trackUris,
+                    offset: { position: offset }
+                }),
+                success: function (response) {
+                    resolve(response);
+                }
+            });
+        });
+    },
+
     play: function (playlistUri, index) {
         var url = USER_PLAYER_PLAY_URL;
 
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: url,
+                url: url + `?device_id=${this.device_id}`,
                 headers: {
                     'Authorization': 'Bearer ' + accessToken
                 },
@@ -242,8 +270,41 @@ const SpotifyAPI = {
         });
     },
 
+    pause: function () {
+        var url = USER_PLAYER_PAUSE_URL;
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: url + `?device_id=${this.device_id}`,
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken
+                },
+                type: 'PUT',
+                success: function (response) {
+                    resolve(response);
+                }
+            });
+        });
+    },
+
     token: function () {
         var url = 'https://gew-spclient.spotify.com/melody/v1/license_url?keysystem=com.widevine.alpha&mediatype=audio';
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: url,
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken
+                },
+                success: function (response) {
+                    resolve(response);
+                }
+            });
+        });
+    },
+
+    devices: function () {
+        var url = DEVICES_URL;
 
         return new Promise((resolve, reject) => {
             $.ajax({

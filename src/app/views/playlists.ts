@@ -15,6 +15,7 @@ namespace Playlists {
 interface Playlists {
     api: MainPresenter;
 }
+
 class Playlists extends BB.View<any> {
     constructor(options: Playlists.IOptions) {
         super(options);
@@ -23,6 +24,14 @@ class Playlists extends BB.View<any> {
         this.api = options.api;
         this.listenTo(this.collection, 'add', this.drawItem);
         this.listenTo(this.collection, 'reset', this.drawItems);
+    }
+    close() {
+        this.$('.content')
+            .toggleClass('right', true);
+        _.delay(() => {
+            this.remove();
+        }, 500);
+        return this;
     }
     drawItem(model) {
         var view = new PlaylistItem({
@@ -47,8 +56,15 @@ class Playlists extends BB.View<any> {
         var html = this.toHTML();
 
         this.$el.html(html);
+        this.$('.content')
+            .toggleClass('hidden', false);
 
         this.drawItems();
+
+        _.delay(() => {
+            this.$('.content')
+                .toggleClass('left', false);
+        });
 
         return this;
     }

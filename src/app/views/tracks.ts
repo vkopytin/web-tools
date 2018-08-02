@@ -45,6 +45,14 @@ class Tracks extends BB.View<any> {
             this.api.sort(this.playlistId, rangeStart, insertBefore);
         });
     }
+    close() {
+        this.$('.content')
+            .toggleClass('right', true);
+        _.delay(() => {
+            this.remove();
+        }, 500);
+        return this;
+    }
     drawItem(model) {
         var view = new TrackItem({
             tagName: 'li',
@@ -72,11 +80,18 @@ class Tracks extends BB.View<any> {
         var html = this.toHTML();
 
         this.$el.html(html);
+        this.$('.content')
+            .toggleClass('hidden', false);
 
         this.drawItems();
 
         this.$('.track-items').sortable({
             handle: '.drag-handler'
+        });
+
+        _.delay(() => {
+            this.$('.content')
+                .toggleClass('left', false);
         });
 
         return this;

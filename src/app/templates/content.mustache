@@ -1,11 +1,14 @@
 <header class="top-toolbar bar bar-nav">
 </header>
-<div class="content">
+<div class="content sliding left hidden">
     <div class="card">
         <ul class="table-view">
             <li class="table-view-cell">{{playback.device.name}}</li>
             <li class="table-view-cell">{{user.email}}</li>
             <li class="table-view-cell">{{playback.item.name}}</li>
+            {{#user.devices}}
+            <li class="table-view-cell">{{id}}</li>
+            {{/user.devices}}
         </ul>
     </div>
 </div>

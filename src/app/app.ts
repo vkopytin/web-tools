@@ -50,13 +50,13 @@ class App extends BB.Router {
         return inst[action].apply(inst, args);
     }
 
-    view(space, action?, id?) {
+    view(spaceName, action?, id?) {
         var action = action || 'view',
-            inst = this.createSpace(space),
-            view = this.callAction(inst, action, [id]);
+            space = this.createSpace(spaceName),
+            view = this.callAction(space, action, [id]);
 
         this.master.setContent(view);
-        this.master.setActiveNav(space);
+        this.master.setActiveNav(spaceName);
     }
 
     index() {

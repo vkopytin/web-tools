@@ -26,22 +26,39 @@ class Content extends BB.View<any> {
     initialize(options) {
         this.playback = options.playback;
         this.listenTo(this.playback, 'change', this.render);
+        this.listenTo(this.model, 'change', this.render);
+    }
+    close() {
+        this.$('.content')
+            .toggleClass('right', true);
+        _.delay(() => {
+            this.remove();
+        }, 500);
+        return this;
     }
     toHTML() {
-        return template(_.extend({
+        const data = _.extend({
             cid: this.cid,
             user: this.model.toJSON(),
             playback: this.playback.toJSON()
-        }));
+        });
+        return template(data);
     }
     render() {
         var html = this.toHTML();
 
         this.$el.html(html);
+        this.$('.content')
+            .toggleClass('hidden', false);
 
         this.toolbar = new ToolBar({
             el: this.$('.top-toolbar')
         }).render();
+
+        _.delay(() => {
+            this.$('.content')
+                .toggleClass('left', false);
+        });
 
         return this;
     }

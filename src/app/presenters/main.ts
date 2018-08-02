@@ -1,40 +1,50 @@
 import * as BB from 'backbone';
+import * as _ from 'underscore';
 
 import { SpotifyAPI } from '../spotifyAPI';
 import { Playlists } from '../collections/playlists';
 
 class MainPresenter {
     profile: { [id: string]: any }
-    _playlists: any
-    _tracks: any
-    _playback: any;
-    _search: any;
+    _profile = new BB.Model();
+    _playlists = new BB.Collection();
+    _tracks = new BB.Collection();
+    _playback = new BB.Model();
+    _search = new BB.Collection();
 
     constructor() {
-        this._playlists = new BB.Collection();
-        this._tracks = new BB.Collection();
-        this._playback = new BB.Model();
-        this._search = new BB.Collection();
     }
 
     async login (username, password) {
         var profile = this.profile = await SpotifyAPI.login(username, password);
-        return profile;
+        this._profile.set(profile);
+        var devices = await SpotifyAPI.devices();
+        this._profile.set(devices);
+        //toDO: refactor this
+        this.playback();
+
+        return !!profile;
     }
 
     async tokenLogin () {
         var profile = this.profile = await SpotifyAPI.tokenLogin();
-        return profile;
+        this._profile.set(profile);
+        var devices = await SpotifyAPI.devices();
+        this._profile.set(devices);
+        //toDO: refactor this
+        this.playback();
+
+        return !!profile;
     }
 
     user () {
-        return new BB.Model(this.profile);
+        return this._profile;
     }
 
     playlists () {
         var items = this._playlists;
         var fetch = async () => {
-            var playlists: { [items: string] : any } = await SpotifyAPI.playlists(this.profile.id);
+            var playlists: { [items: string] : any } = await SpotifyAPI.playlists(this._profile.id);
 
             items.reset(playlists.items);
         };
@@ -82,10 +92,26 @@ class MainPresenter {
         return true;
     }
 
+    playTracks(tracksList, offset) {
+        var put = async () => {
+            var tracks: { [items: string] : any } = await SpotifyAPI.playTracks(_.pluck(tracksList, 'uri'), offset);
+        };
+        put();
+        return true;
+    }
+
     play(track, playlistId) {
         var playlist = this._playlists.get(playlistId).toJSON(),
             put = async () => {
             var tracks: { [items: string] : any } = await SpotifyAPI.play(playlist.uri, track.uri);
+        };
+        put();
+        return true;
+    }
+
+    pause() {
+        var put = async () => {
+            await SpotifyAPI.pause();
         };
         put();
         return true;

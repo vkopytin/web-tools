@@ -10,23 +10,61 @@
     <title>Web Tools</title>
 </head>
 <body class="portrait">
-    <section>
-        <div xx class="editing-region" contenteditable="true">
-            <p contenteditable="true">Some text</p>
-            <p contenteditable="true">Another text</p>
-            <p contenteditable="true"></p>
-        </div>
-    </section>
-    <div id="x-wrapper" class="ios6"></div>
-    <!--pre>
-        &lt;script&gt;(function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "http://localhost:3010/app.js?hash=de2b4d5a10d07f39013a";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'web-tools'));&lt;/script&gt;
-    </pre-->
-    <script src='https://darksky.net/map-embed/@temperature,32.547,31.992,2.js?embed=true&timeControl=false&fieldControl=false&defaultField=temperature&defaultUnits=_c'></script>
 </body>
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script>
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      const token = getCookie('wp_access_token');
+      const player = new Spotify.Player({
+        name: 'Web Playback SDK Quick Start Player',
+        getOAuthToken: function (cb) {
+            setCookie('device_id', player._options.id);
+            cb(token);
+        }
+      });
+
+      // Error handling
+      player.addListener('initialization_error', ({ message }) => { console.error(message); });
+      player.addListener('authentication_error', ({ message }) => { console.error(message); });
+      player.addListener('account_error', ({ message }) => { console.error(message); });
+      player.addListener('playback_error', ({ message }) => { console.error(message); });
+
+      // Playback status updates
+      player.addListener('player_state_changed', state => { console.log(state); });
+
+      // Ready
+      player.addListener('ready', ({ device_id }) => {
+        console.log('Ready with Device ID', device_id);
+      });
+
+      // Not Ready
+      player.addListener('not_ready', ({ device_id }) => {
+        console.log('Device ID has gone offline', device_id);
+      });
+
+      // Connect to the player!
+      player.connect();
+    };
+  </script>
 </html>

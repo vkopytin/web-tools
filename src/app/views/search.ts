@@ -33,6 +33,14 @@ class Search extends BB.View<any> {
         this.$el.trigger('loading');
         this.api.search(value);
     }
+    close() {
+        this.$('.content')
+            .toggleClass('right', true);
+        _.delay(() => {
+            this.remove();
+        }, 500);
+        return this;
+    }
     toHTML() {
         return template(_.extend({
             cid: this.cid,
@@ -44,12 +52,14 @@ class Search extends BB.View<any> {
         }));
     }
     drawItem(model) {
-        var view = new TrackItem({
-            tagName: 'li',
-            className: 'table-view-cell media',
-            model: model,
-            api: this.api
-        });
+        var value = '' + this.$('.search-term').val(),
+            view = new TrackItem({
+                tagName: 'li',
+                className: 'table-view-cell media',
+                model: model,
+                api: this.api,
+                searchUri: 'spotify:list:search:' + encodeURIComponent(value)
+            });
         this.$('ul').append(view.$el);
         view.render();
         this.items.push(view);
@@ -65,7 +75,15 @@ class Search extends BB.View<any> {
         var html = this.toHTML();
 
         this.$el.html(html);
+        this.$('.content')
+            .toggleClass('hidden', false);
+
         this.$('.search-term').focus();
+
+        _.delay(() => {
+            this.$('.content')
+                .toggleClass('left', false);
+        });
 
         return this;
     }

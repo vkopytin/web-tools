@@ -13,6 +13,7 @@ namespace TrackItem {
     export interface IOptions extends BB.ViewOptions<any> {
         api: MainPresenter;
         playlistId?: string;
+        searchUri?: string;
     }
 }
 @events({
@@ -26,16 +27,21 @@ class TrackItem extends BB.View<any> {
     }
     api: MainPresenter;
     playlistId: string;
+    searchUri: string;
     initialize(options) {
         this.api = options.api;
         this.playlistId = options.playlistId;
+        this.searchUri = options.searchUri;
     }
     playPreview() {
         if (this.playlistId) {
             this.api.play(this.model.get('track'), this.playlistId);
+        } else if (this.searchUri) {
+            const index = this.model.collection.indexOf(this.model);
+            this.api.playTracks(this.model.collection.toJSON(), index);
         } else {
             this.api.playTrack(this.model.toJSON());
-        }    
+        }
 
         this.$('.preview-play').toggleClass('hidden', true);
         this.$('.preview-stop').toggleClass('hidden', false);
@@ -47,6 +53,7 @@ class TrackItem extends BB.View<any> {
         this.$('video').each((i, el: HTMLVideoElement) => {
             el.pause();
         });
+        this.api.pause();
     }
     toHTML() {
         var data = this.model.toJSON(),
