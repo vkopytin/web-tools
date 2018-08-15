@@ -1,31 +1,17 @@
 import * as BB from 'backbone';
+import { Base } from '../views/base';
 import { Settings } from '../views/settings';
 import { MainPresenter } from '../presenters/main';
+import { ViewModel } from '../di/ViewModel';
 
-namespace SettingsSpace {
-    export interface IOptions extends BB.ViewOptions<any> {
-        app: BB.Router;
-        api: MainPresenter;
-    }
-}
 
-interface SettingsSpace {
-    app: BB.Router;
-    api: MainPresenter;
-}
-class SettingsSpace extends BB.View<any> {
-    constructor(options: SettingsSpace.IOptions) {
-        super(options);
-    }
-    initialize (options) {
-        this.app = options.app;
-        this.api = options.api;
-    }
+class SettingsSpace extends ViewModel(Base, { MainPresenter })<BB.Model> {
     view() {
-        return new Settings({
-            api: this.api,
-            model: this.api.user()
-        });
+        return this;
+    }
+    remove() {
+        this.$el.toggleClass('hidden');
+        return this;
     }
 }
 

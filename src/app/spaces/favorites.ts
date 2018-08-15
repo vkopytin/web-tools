@@ -1,6 +1,8 @@
 import * as BB from 'backbone';
+import { Base } from '../views/base';
 import { Favorites } from '../views/favorites';
 import { MainPresenter } from '../presenters/main';
+import { ViewModel } from '../di/ViewModel';
 
 
 namespace FavoritesSpace {
@@ -15,17 +17,10 @@ interface FavoritesSpace {
     api: MainPresenter;
 }
 
-const FavoritesSpace = BB.View.extend({
-    initialize: function (options) {
-        this.app = options.app;
-        this.api = options.api;
-    },
-    view: function () {
-        return new Favorites({
-            api: this.api,
-            model: this.api.user()
-        });
+class FavoritesSpace extends ViewModel(Base, { MainPresenter })<BB.Model> {
+    view() {
+        return this;
     }
-});
+}
 
 export { FavoritesSpace };

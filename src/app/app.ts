@@ -2,12 +2,12 @@ import * as _ from 'underscore';
 import * as $ from 'jquery';
 import * as BB from 'backbone';
 import { MainView } from './views/main';
-import { Playlists } from './views/playlists';
-import { Content } from './views/content';
-import { Login } from './views/login';
 import { MainPresenter } from './presenters/main';
 import * as spaces from './spaces';
 import { routes } from './utils/bbUtils';
+import { DI } from './di/DI';
+import './moduleLoader';
+
 
 @routes({
     ':space(/:view)(/:id)': 'view',
@@ -18,7 +18,7 @@ class App extends BB.Router {
     master: MainView;
 
     initialize() {
-        this.api = new MainPresenter();
+        this.api = DI.instance({ MainPresenter });
         this.master = new MainView({
             el: document.body,
             api: this.api
@@ -34,16 +34,19 @@ class App extends BB.Router {
     }
 
     findSpace<T extends new(...args) => T>(spaces, name): T {
-        return _.find(spaces, (v, k: string) => (k.replace(/Space$/i, '').toLowerCase() === name.toLowerCase()));
+        const $TypeInfo = _.pick(
+            spaces
+            ,
+            (v, k: string) => (k.replace(/Space$/i, '').toLowerCase() === name.toLowerCase())
+        );
+
+        return $TypeInfo;
     }
 
     createSpace(name) {
-        var Ctor = this.findSpace(spaces, name);
+        var $TypeInfo = this.findSpace(spaces, name);
 
-        return new Ctor({
-            app: this,
-            api: this.api
-        });
+        return DI.instance($TypeInfo);
     }
 
     callAction(inst, action, args) {

@@ -68,6 +68,8 @@ class MainView extends BB.View<any> {
         this.showSpinner();
         this.content = view;
         this.$('.main').prepend(view.el);
+        view.setElement(view.el); // toDO: refactor
+        view.$el.toggleClass('hidden', false);
         view.render();
         this.hideSpinner();
     }

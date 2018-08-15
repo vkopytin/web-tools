@@ -1,6 +1,8 @@
 import * as BB from 'backbone';
+import { Base } from '../views/base';
 import { Tracks } from '../views/tracks';
 import { MainPresenter } from '../presenters/main';
+import { ViewModel } from '../di/ViewModel';
 
 
 namespace TracksSpace {
@@ -13,22 +15,18 @@ namespace TracksSpace {
 interface TracksSpace {
     app: BB.Router;
     api: MainPresenter;
+    playlistId;
 }
 
-class TracksSpace extends BB.View<any> {
-    constructor(options: TracksSpace.IOptions) {
-        super(options);
-    }
-    initialize(options) {
-        this.app = options.app;
-        this.api = options.api;
-    }
+class TracksSpace extends ViewModel(Base, { MainPresenter })<BB.Model> {
+
     view(playlistId) {
-        return new Tracks({
-            api: this.api,
-            playlistId: playlistId,
-            collection: this.api.tracks(playlistId)
-        });
+        this.playlistId = playlistId;
+        return this;
+    }
+    remove() {
+        this.$el.toggleClass('hidden');
+        return this;
     }
 }
 

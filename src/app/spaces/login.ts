@@ -1,6 +1,8 @@
 import * as BB from 'backbone';
+import { Base } from '../views/base';
 import { Login } from '../views/login';
 import { MainPresenter } from '../presenters/main';
+import { ViewModel } from '../di/ViewModel';
 
 
 namespace LoginSpace {
@@ -14,18 +16,13 @@ interface LoginSpace {
     app: BB.Router;
     api: MainPresenter;
 }
-class LoginSpace extends BB.View<any> {
-    constructor(options: LoginSpace.IOptions) {
-        super(options);
-    }
-    initialize(options) {
-        this.app = options.app;
-        this.api = options.api;
-    }
+class LoginSpace extends ViewModel(Base, { MainPresenter })<BB.Model> {
     view() {
-        return new Login({
-            api: this.api
-        });
+        return this;
+    }
+    remove() {
+        this.$el.toggleClass('hidden');
+        return this;
     }
 }
 

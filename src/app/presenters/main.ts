@@ -28,11 +28,11 @@ class MainPresenter {
 
     async tokenLogin () {
         var profile = this.profile = await SpotifyAPI.tokenLogin();
-        this._profile.set(profile);
-        var devices = await SpotifyAPI.devices();
-        this._profile.set(devices);
-        //toDO: refactor this
-        this.playback();
+        if (profile) {
+            this._profile.set(profile);
+            var devices = await SpotifyAPI.devices();
+            this._profile.set(devices);
+        }
 
         return !!profile;
     }

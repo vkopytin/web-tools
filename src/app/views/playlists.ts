@@ -3,7 +3,7 @@ import * as $ from 'jquery';
 import * as BB from 'backbone';
 import { PlaylistItem } from './playlistItem';
 import { MainPresenter } from '../presenters/main';
-import { debounce, events } from '../utils/bbUtils';
+import { PlaylistsSpace } from '../spaces/playlists';
 const template = require('../templates/playlists');
 
 
@@ -16,58 +16,63 @@ interface Playlists {
     api: MainPresenter;
 }
 
-class Playlists extends BB.View<any> {
-    constructor(options: Playlists.IOptions) {
-        super(options);
-    }
-    initialize(options) {
-        this.api = options.api;
-        this.listenTo(this.collection, 'add', this.drawItem);
-        this.listenTo(this.collection, 'reset', this.drawItems);
-    }
-    close() {
-        this.$('.content')
-            .toggleClass('right', true);
-        _.delay(() => {
-            this.remove();
-        }, 500);
-        return this;
-    }
-    drawItem(model) {
-        var view = new PlaylistItem({
-            tagName: 'li',
-            className: 'table-view-cell media',
-            model: model,
-            api: this.api
-        });
-        this.$('.playlist-items').append(view.$el);
-        view.render();
-    }
-    drawItems() {
-        this.$('.playlist-items').empty();
-        this.collection.each(this.drawItem, this);
-    }
-    toHTML() {
-        return template(_.extend({
-            cid: this.cid
-        }));
-    }
-    render() {
-        var html = this.toHTML();
-
-        this.$el.html(html);
-        this.$('.content')
-            .toggleClass('hidden', false);
-
-        this.drawItems();
-
-        _.delay(() => {
+const Playlists = <T extends Constructor<PlaylistsSpace>>(Base: T) => {
+    class Playlists$PlaylistsSpace extends Base {
+        initialize(options) {
+            this.api = this.viewModel;
+            this.collection = this.api.playlists();
+            this.listenTo(this.collection, 'add', this.drawItem);
+            this.listenTo(this.collection, 'reset', this.drawItems);
+        }
+        view() {
+            this.api.playlists();
+            return this;
+        }
+        close() {
             this.$('.content')
-                .toggleClass('left', false);
-        });
+                .toggleClass('right', true);
+            _.delay(() => {
+                this.remove();
+            }, 500);
+            return this;
+        }
+        drawItem(model) {
+            var view = new PlaylistItem({
+                tagName: 'li',
+                className: 'table-view-cell media',
+                model: model,
+                api: this.api
+            });
+            this.$('.playlist-items').append(view.$el);
+            view.render();
+        }
+        drawItems() {
+            this.$('.playlist-items').empty();
+            this.collection.each(this.drawItem, this);
+        }
+        toHTML() {
+            return template(_.extend({
+                cid: this.cid
+            }));
+        }
+        render() {
+            var html = this.toHTML();
 
-        return this;
+            this.$el.html(html);
+            this.$('.content')
+                .toggleClass('hidden', false);
+
+            this.drawItems();
+
+            _.delay(() => {
+                this.$('.content')
+                    .toggleClass('left', false);
+            });
+
+            return this;
+        }
     }
+    return Playlists$PlaylistsSpace;
 }
 
 export { Playlists };
