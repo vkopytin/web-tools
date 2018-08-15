@@ -14,6 +14,7 @@ const cssnano = require('cssnano')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const BabiliPlugin = require('babili-webpack-plugin')
 const IDom = require('babel-plugin-transform-incremental-dom')
+const { TsConfigPathsPlugin } = require('awesome-typescript-loader')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const CDN_PATH = process.env.CDN;
@@ -56,6 +57,7 @@ const config = {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.mustache', '.less']
   },
   plugins: [
+    new TsConfigPathsPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': `'${process.env.NODE_ENV}'`
     }),
@@ -84,7 +86,8 @@ const config = {
   ],
   module: {
     rules: [{
-      test: /\.tsx?$/, loaders: ['babel-loader', 'ts-loader'], exclude: /node_modules/
+      //test: /\.tsx?$/, loaders: ['babel-loader', 'ts-loader'], exclude: /node_modules/
+      test: /\.tsx?$/, loader: 'awesome-typescript-loader', query: { tsconfig: './tsconfig.json' }
     }, {
       test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/
     }, {
