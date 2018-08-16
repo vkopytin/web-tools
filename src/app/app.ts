@@ -33,7 +33,7 @@ class App extends BB.Router {
         })
     }
 
-    findSpace<T extends new(...args) => T>(spaces, name): T {
+    findSpace<T extends { [key: string]: new (...args) => Y }, Y>(spaces, name): T {
         const $TypeInfo = _.pick(
             spaces
             ,
