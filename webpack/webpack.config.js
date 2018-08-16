@@ -7,7 +7,7 @@ var PUBLIC_DIR = 'entry-editor/prod';
 
 const config = {
     mode: 'development',
-    devtool: DEBUG ? 'eval' : ['alpha'].indexOf(process.env.NODE_ENV) === -1 ? false : 'source-map',
+    devtool: DEBUG ? 'eval' : ['alpha'].indexOf(process.env.NODE_ENV) === -1 ? 'nosources-source-map' : 'source-map',
     entry: {
         app: ['babel-polyfill', path.join(__dirname, '../src/app/mainApp.ts')]
     },
