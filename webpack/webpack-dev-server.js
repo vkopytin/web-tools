@@ -18,7 +18,7 @@ new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
   hot: true,
   host: ip,
-  stats: false,
+  stats: 'normal',
   historyApiFallback: true,
   https: false, // make upload image working over proxy requests, since request comes to hardcoded https
   contentBase: ['public', 'build'],
@@ -26,7 +26,7 @@ new WebpackDevServer(webpack(config), {
   headers: {
     'Access-Control-Allow-Origin': '*'
   },
-  setup: function (app, server) {
+  before: function (app) {
     let __routes = new routes.Routes(process.env.NODE_ENV);
     __routes.paths(app);
   },

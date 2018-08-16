@@ -3,18 +3,19 @@
         "experimentalDecorators": true,
         "moduleResolution": "node",
         "module": "commonjs",
-        "target": "es6",
+        "target": "es5",
         "noImplicitAny": false,
         "sourceMap": false,
         "jsx": "react",
-        "allowJs": true
+        "allowJs": false,
+        "allowUnreachableCode": true,
+        "baseUrl": "./src",
+        "lib": [
+            "es6", "dom"
+        ]
     },
-    "include": [
-        "./src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ],
+//    "include": [ "**/*.ts" ],
+    "exclude": [ "./src/server", "node_modules" ],
     "filesGlob": [
         "./src/*.d.ts"
     ]

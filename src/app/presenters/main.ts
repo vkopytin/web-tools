@@ -54,7 +54,7 @@ class MainPresenter {
 
     tracks (playlistId) {
         var items = this._tracks;
-        if (this._playlists.length > 0) {
+        if (playlistId && this._playlists.length > 0) {
             var user = this._playlists.get(playlistId).get('owner');
             var fetch = async () => {
                 var tracks: { [items: string]: any } = await SpotifyAPI.tracks(user.id, playlistId);
