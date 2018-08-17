@@ -7,7 +7,6 @@ import template = require('../templates/navigation.mustache');
 
 namespace Navigation {
     export interface IOptions extends BB.ViewOptions<any> {
-        api: MainPresenter;
     }
 }
 class Navigation extends BB.View<any> {

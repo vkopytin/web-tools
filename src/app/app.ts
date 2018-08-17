@@ -14,23 +14,21 @@ import './moduleLoader';
     '(/)': 'index'
 })
 class App extends BB.Router {
-    api: MainPresenter;
     master: MainView;
 
     initialize() {
-        this.api = DI.instance({ MainPresenter });
         this.master = new MainView({
-            el: document.body,
-            api: this.api
+            el: document.body
         }).render();
 
         _.defer(async () => {
-            if (!await this.api.tokenLogin()) {
+            const api = DI.get({ MainPresenter });
+            if (!await api.tokenLogin()) {
                 BB.history.navigate('/login', true);
             } else {
                 BB.history.navigate('/home', true);
             }
-        })
+        });
     }
 
     findSpace<T extends { [key: string]: new (...args) => Y }, Y>(spaces, name): T {
@@ -46,7 +44,7 @@ class App extends BB.Router {
     createSpace(name) {
         var $TypeInfo = this.findSpace(spaces, name);
 
-        return DI.instance($TypeInfo);
+        return DI.get($TypeInfo);
     }
 
     callAction(inst, action, args) {

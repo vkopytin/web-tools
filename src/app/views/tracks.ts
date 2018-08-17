@@ -11,18 +11,7 @@ import { TracksSpace } from '../spaces/tracks';
 import template = require('../templates/tracks.mustache');
 
 
-namespace Tracks {
-    export interface IOptions extends BB.ViewOptions<any> {
-        api: MainPresenter;
-        playlistId: string;
-    }
-}
-
 const Tracks = <T extends Constructor<TracksSpace>>(Base: T) => {
-    interface Tracks$TracksSpace {
-        api: MainPresenter;
-        playlistId: string;
-    }
     @events({
         'sortstart .track-items': 'sortStart'
     })
@@ -30,7 +19,6 @@ const Tracks = <T extends Constructor<TracksSpace>>(Base: T) => {
         items = [];
         initialize(options) {
             this.items = [];
-            this.api = this.viewModel;
             this.collection = this.viewModel.tracks('');
 
             this.listenTo(this.collection, 'add', this.drawItem);
@@ -38,14 +26,14 @@ const Tracks = <T extends Constructor<TracksSpace>>(Base: T) => {
         }
         view(playlistId) {
             this.playlistId = playlistId;
-            this.api.tracks(playlistId);
+            this.viewModel.tracks(playlistId);
             return this;
         }
         sortStart(evnt, ui) {
             var rangeStart = this.$('.track-items li').index(ui.item);
             this.$('.track-items').one('sortstop', (evnt, ui) => {
                 var insertBefore = this.$('.track-items li').index(ui.item);
-                this.api.sort(this.playlistId, rangeStart, insertBefore);
+                this.viewModel.sort(this.playlistId, rangeStart, insertBefore);
             });
         }
         close() {
@@ -61,7 +49,7 @@ const Tracks = <T extends Constructor<TracksSpace>>(Base: T) => {
                 tagName: 'li',
                 className: 'table-view-cell media',
                 model: model,
-                api: this.api,
+                api: this.viewModel,
                 playlistId: this.playlistId
             });
             this.$('.track-items').append(view.$el);

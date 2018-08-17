@@ -40,8 +40,8 @@ const config = {
             test: /\.mustache$/,
             use: 'mustache-loader'
         }, {
-            test: /\.css$/,
-            loader: 'style-loader!css-loader?minimize=1?importLoaders=1!resolve-url-loader!postcss-loader'
+            test: /\.(s*)css$/,
+            loader: 'style-loader!css-loader?minimize=1?importLoaders=1!resolve-url-loader!postcss-loader!sass-loader'
         }, {
             test: /\.less$/,
             use: [{

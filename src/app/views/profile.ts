@@ -5,16 +5,7 @@ import { MainPresenter } from '../presenters/main';
 import template = require('../templates/profile.mustache');
 
 
-namespace Profile {
-    export interface IOptions extends BB.ViewOptions<any> {
-        api: MainPresenter;
-    }
-}
-
 class Profile extends BB.View<any> {
-    constructor(options: Profile.IOptions) {
-        super(options);
-    }
     initialize() {
         console.log('Profile: Initialize');
     }

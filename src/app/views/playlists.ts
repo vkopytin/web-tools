@@ -19,13 +19,12 @@ interface Playlists {
 const Playlists = <T extends Constructor<PlaylistsSpace>>(Base: T) => {
     class Playlists$PlaylistsSpace extends Base {
         initialize(options) {
-            this.api = this.viewModel;
-            this.collection = this.api.playlists();
+            this.collection = this.viewModel.playlists();
             this.listenTo(this.collection, 'add', this.drawItem);
             this.listenTo(this.collection, 'reset', this.drawItems);
         }
         view() {
-            this.api.playlists();
+            this.viewModel.playlists();
             return this;
         }
         close() {
@@ -40,8 +39,7 @@ const Playlists = <T extends Constructor<PlaylistsSpace>>(Base: T) => {
             var view = new PlaylistItem({
                 tagName: 'li',
                 className: 'table-view-cell media',
-                model: model,
-                api: this.api
+                model: model
             });
             this.$('.playlist-items').append(view.$el);
             view.render();

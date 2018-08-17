@@ -9,22 +9,14 @@ import { SearchSpace } from '../spaces/search';
 const template = require('../templates/search');
 
 
-namespace Search {
-    export interface IOptions extends BB.ViewOptions<any> {
-        api: MainPresenter;
-    }
-}
-
 const Search = <T extends Constructor<SearchSpace>>(Base: T) => {
     @events({
         'input .search-term': 'search'
     })
     class Search$SearchSpace extends Base {
-        api: MainPresenter;
         items = [];
         initialize(options) {
-            this.api = this.viewModel;
-            this.collection = this.api.search();
+            this.collection = this.viewModel.search();
             this.listenTo(this.collection, 'reset', this.drawItems);
         }
         view() {
@@ -34,7 +26,7 @@ const Search = <T extends Constructor<SearchSpace>>(Base: T) => {
         search(evnt) {
             var value = this.$('.search-term').val();
             this.$el.trigger('loading');
-            this.api.search(value);
+            this.viewModel.search(value);
         }
         close() {
             this.$('.content')
@@ -60,7 +52,7 @@ const Search = <T extends Constructor<SearchSpace>>(Base: T) => {
                     tagName: 'li',
                     className: 'table-view-cell media',
                     model: model,
-                    api: this.api,
+                    api: this.viewModel,
                     searchUri: 'spotify:list:search:' + encodeURIComponent(value)
                 });
             this.$('ul').append(view.$el);

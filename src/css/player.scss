@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css?family=Questrial');
+
+:root {
+  --primary-r: 72;
+  --primary-g: 100;
+  --primary-b: 76;
+  --secondary-r: 139;
+  --secondary-g: 169;
+  --secondary-b: 137;
+  --white-r: 255;
+  --white-g: 255;
+  --white-b: 255;
+  --light-r: 192;
+  --light-g: 207;
+  --light-b: 178;
+  --dark-r: 54;
+  --dark-g: 79;
+  --dark-b: 60;
+  --font: 'Questrial', sans-serif;
+}
+
+#player {
+  position: relative;
+  margin: auto;
+  height: 300px;
+  overflow: hidden;
+}
+
+.album {
+  width: 100%;
+  height: 100%;
+  background-size: 100%;
+  position: absolute;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(var(--white-r), var(--white-g), var(--white-b));
+    opacity: .2; 
+  }
+}
+
+.heart {
+  position: absolute;
+  right: 0;
+  color: rgb(var(--white-r), var(--white-g), var(--white-b));
+  margin: 10px;
+  transition: all .4s ease;
+}
+
+.clicked {
+  color: rgb(var(--primary-r), var(--primary-g), var(--primary-b));
+  transform: scale(1.2);
+  transition: all .4s ease;
+}
+
+.info {
+  height: 115px;
+  width: 100%;
+  position: absolute;
+  bottom:0;
+  background: rgba(var(--white-r), var(--white-g), var(--white-b), .85);
+  transform: translateY(35px);
+  transition: all .5s ease-in-out;
+}
+
+.up {
+  transform: translateY(0px);
+}
+
+.progress-bar {
+  height: 5px;
+  width: 73%;
+  margin: 20px auto;
+  background: rgba(var(--light-r), var(--light-g), var(--light-b), .95);
+  border-radius: 10px;
+  font-family: var(--font);
+}
+
+.fill {
+  background-color: rgb(var(--secondary-r), var(--secondary-g), var(--secondary-b));
+  width: 35%;
+  height: 0.3rem;
+  border-radius: 2px;
+}
+
+.time--current, .time--total {
+  color: rgb(var(--dark-r), var(--dark-g), var(--dark-b));
+  font-size: 10px;
+  position: absolute;
+  margin-top: -2px;
+}
+
+.time--current {
+  left: 15px;
+}
+
+.time--total {
+  right: 15px;
+}
+
+.currently-playing {
+  text-align: center;
+  margin-top: -3px;
+}
+
+.song-name, .artist-name {
+  font-family: var(--font);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.song-name {
+  font-size: .8em;
+  letter-spacing: 3px;
+  color: rgb(var(--dark-r), var(--dark-g), var(--dark-b));
+}
+
+.artist-name {
+  font-size: .6em;
+  letter-spacing: 1.5px;
+  color: rgba(var(--dark-r), var(--dark-g), var(--dark-b), 0.85);
+  margin-top: 5px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  font-size: .8em;
+  justify-content: center;
+  color: rgb(var(--secondary-r), var(--secondary-g), var(--secondary-b));
+  .play, .pause {
+    margin: 15px 25px;
+    color: rgba(var(--secondary-r), var(--secondary-g), var(--secondary-b), 0.90);
+  }
+  .option {
+    left: 10px;
+    position: absolute;
+    font-size: .8em;
+  }
+  .add {
+    right: 10px; 
+    position: absolute;
+    font-size: .8em;
+  }
+  .volume {
+    margin-right: 30px;
+    font-size: .8em;
+  }
+  .shuffle {
+    margin-left: 30px;
+    font-size: .8em;
+  }
+}
+
+.play, .pause, .next, .previous, .option, .add, .volume, .shuffle {
+  transition: all .5s ease;
+  &:hover {
+    color: rgba(var(--dark-r), var(--dark-g), var(--dark-b), .85);
+  }
+}

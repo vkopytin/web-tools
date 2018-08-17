@@ -9,12 +9,10 @@ import { events } from '../utils/bbUtils';
 
 namespace MainView {
     export interface IOptions extends BB.ViewOptions<any> {
-        api: MainPresenter;
     }
 }
 
 interface MainView {
-    api: MainPresenter;
     modal: BB.View<any>;
     content: BB.View<any>;
     navigationBar: Navigation;
@@ -32,9 +30,6 @@ class MainView extends BB.View<any> {
         super(options);
     }
 
-    initialize(options) {
-        this.api = options.api;
-    }
     navigate(evnt) {
         var $el = this.$(evnt.currentTarget),
             href = $el.attr('href'),
@@ -88,8 +83,7 @@ class MainView extends BB.View<any> {
         this.$el.html(html);
 
         this.navigationBar = new Navigation({
-            el: this.$('.navigation-bar'),
-            api: this.api
+            el: this.$('.navigation-bar')
         }).render();
 
         return this;

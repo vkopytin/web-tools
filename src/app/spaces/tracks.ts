@@ -5,21 +5,8 @@ import { MainPresenter } from '../presenters/main';
 import { ViewModel } from '../di/ViewModel';
 
 
-namespace TracksSpace {
-    export interface IOptions extends BB.ViewOptions<any> {
-        app: BB.Router;
-        api: MainPresenter;
-    }
-}
-
-interface TracksSpace {
-    app: BB.Router;
-    api: MainPresenter;
-    playlistId;
-}
-
 class TracksSpace extends ViewModel(Base, { MainPresenter })<BB.Model> {
-
+    playlistId = '';
     view(playlistId) {
         this.playlistId = playlistId;
         return this;

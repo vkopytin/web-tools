@@ -7,14 +7,10 @@ import { ViewModel } from '../di/ViewModel';
 
 namespace LoginSpace {
     export interface IOptions extends BB.ViewOptions<any> {
-        app: BB.Router;
-        api: MainPresenter;
     }
 }
 
 interface LoginSpace {
-    app: BB.Router;
-    api: MainPresenter;
 }
 class LoginSpace extends ViewModel(Base, { MainPresenter })<BB.Model> {
     view() {
